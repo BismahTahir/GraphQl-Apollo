@@ -1,0 +1,57 @@
+query users {
+  users {
+    id
+    name
+    address
+  }
+}
+
+query quotes {
+  quotes {
+    quote
+    by
+  }
+}
+
+query allUsers{
+  users{
+    name,
+    id
+    quotes {
+      quote
+    }
+  }
+}
+
+query getQuoteById{
+ singleQuote(by:"11"){
+   quote
+ }
+}
+
+query getUserById {
+ user(id:"11"){
+name,
+address
+ }
+}
+
+query getUserById($userId:ID!) {
+ user(id:$userId){
+name,
+address
+ }
+}
+
+query getQuoteById($quote_id:ID!){
+ singleQuote(by:$quote_id){
+   quote
+ }
+}
+
+mutation createUser($user_name:String!,$user_address:String!){
+signUpUser(name: $user_name, address: $user_address){
+address,
+name
+}
+}
