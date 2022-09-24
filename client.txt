@@ -55,3 +55,29 @@ address,
 name
 }
 }
+
+
+mutation createUser($newUser: userInput!){
+signUpUser(newUser: $newUser) {
+  name
+}
+
+}
+
+mutation createUser($newUser: userInput!){
+useralias:signUpUser(newUser: $newUser) {
+  name
+}
+
+}
+
+mutation userLogin($user:signInUser){
+  signInUser(customUser:$user){
+    token
+  }
+
+}
+
+mutation quote( $description: String!){
+ createQuote(description: $description)
+}

@@ -1,6 +1,10 @@
-import { ApolloServer, gql } from "apollo-server";
+import {  gql } from "apollo-server";
 
 //schema here
+
+//   type Mutation{
+//      signUpUser(name:String!,address:String!):user
+//    }
 const typeDefs = gql`
   type Query {
     greet: String
@@ -14,16 +18,34 @@ const typeDefs = gql`
     quote: String
   }
   type user {
-    id: ID!
+    _id: ID!
     name: String
+    email: String
+    password: String
     address: String
     quotes: [quote]
   }
 
-  type Mutation{
-    signUpUser(name:String!,address:String!):user
+  type Token {
+    token: String!
+  }
 
-    
+  type Mutation {
+    signUpUser(newUser: userInput!): user
+    signInUser(customUser: signInUser): Token
+    createQuote(description:String!):String!
+  }
+
+  input signInUser {
+    userName: String!
+    userEmail: String!
+    password: String!
+  }
+  input userInput {
+    name: String!
+    address: String!
+    email: String!
+    password: String!
   }
 `;
 
