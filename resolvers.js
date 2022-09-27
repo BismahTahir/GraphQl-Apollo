@@ -10,23 +10,26 @@ const resolvers = {
     greet: () => {
       return "hello bisma";
     },
-    users: () => {
-      return users;
+    users: async () => {
+      return await User.find({});
     },
-    quotes: () => {
-      return quotes_;
+    quotes: async () => {
+      return await Quote.find({}).populate("by", "_id name");
     },
-    user: (parent, args) => {
-      return users.find((us) => us.id == args.id);
+    user: async (parent, args) => {
+      return await User.findOne({ _id: args._id });
+      // return users.find((us) => us.id == args.id);
     },
-    singleQuote: (parent, { by }) => {
-      return quotes_.filter((quo) => quo.by == by);
+    singleQuote: async (parent, { by }) => {
+      return await Quote.find({ by });
+      // return quotes_.filter((quo) => quo.by == by);
     },
   },
   user: {
-    quotes: (user) => {
-      console.log(user.id);
+    quotes: async (user) => {
+      // console.log(user.id);
       // return quotes_.filter((quote) => quote.by == user.id);
+      return await Quote.find({ by: user._id });
     },
   },
   Mutation: {
@@ -73,20 +76,31 @@ const resolvers = {
         token: token,
       };
     },
-    createQuote: async(parent, { description },{userId}) => {
-      console.log("===>",userId);
-      if(!userId) throw new Error("You must be logged In");
+    createQuote: async (parent, { description }, { userId }) => {
+      console.log("===>", userId);
+      if (!userId) throw new Error("You must be logged In");
 
-      const singleUser=await User.findById({
-        _id:userId
-      })
+      const singleUser = await User.findById({
+        _id: userId,
+      });
 
       const quote = await new Quote({
         quote: description,
         by: singleUser._id,
       });
-await quote.save();
+      await quote.save();
       return "Quote has been creadted";
+    },
+
+    updateQuote: async (parent, { _id, newQuote }) => {
+      const res = await Quote.findOneAndUpdate({ _id }, { quote: newQuote });
+
+      return res;
+    },
+    deleteQuote: async (parent, { _id }, context) => {
+      const quote = await Quote.findByIdAndRemove({ _id });
+
+      return quote;
     },
   },
 };

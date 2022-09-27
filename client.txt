@@ -49,6 +49,15 @@ query getQuoteById($quote_id:ID!){
  }
 }
 
+query Quotes {
+  quotes {
+  quote,by {
+    _id,name
+  }
+}
+}
+
+
 mutation createUser($user_name:String!,$user_address:String!){
 signUpUser(name: $user_name, address: $user_address){
 address,
@@ -80,4 +89,10 @@ mutation userLogin($user:signInUser){
 
 mutation quote( $description: String!){
  createQuote(description: $description)
+}
+
+mutation updateQuote_($updateQuoteId: ID!,$newQuote:String!){
+updateQuote(_id: $updateQuoteId,newQuote:$newQuote) {
+ quote
+}
 }
